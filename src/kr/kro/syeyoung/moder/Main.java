@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import javax.security.auth.login.LoginException;
 
+import kr.kro.syeyoung.moder.event.ModerationEventHandler;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -44,6 +45,8 @@ public class Main {
 		jda = new JDABuilder(AccountType.BOT).setToken(token).setStatus(OnlineStatus.ONLINE).setGame(Game.of(GameType.LISTENING, "+help")).build();
 		jda.awaitReady();
 		INSTANCE = this;
+		
+		jda.addEventListener(new ModerationEventHandler());
 	}
 	
 	public static void main(String args[]) {
