@@ -1,5 +1,7 @@
 package kr.kro.syeyoung.moder.database;
 
+import java.sql.SQLException;
+
 import kr.kro.syeyoung.moder.database.DTO_ModerationLog.EventType;
 
 public class DTO_RoleLog {
@@ -48,9 +50,8 @@ public class DTO_RoleLog {
 		this.type = type;
 	}
 
-	//TODO make DAO and return DTO ROLE
-	public DTO_Role getDTORole() {
-		return null;
+	public DTO_Role getDTORole() throws SQLException {
+		return DAO_RoleLog.getRoleByRoleId(roleId).get();
 	}
 	
 	/**
@@ -60,6 +61,9 @@ public class DTO_RoleLog {
 		return roleId;
 	}
 
+	protected void setRoleId(long role) {
+		this.roleId = role;
+	}
 	public void setRole(DTO_Role role) {
 		this.roleId = role.getRoleId();
 	}
