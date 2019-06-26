@@ -72,6 +72,9 @@ public class DTO_Member {
 		roleIds.remove(role.getRoleId());
 	}
 	
+	protected void setRoles(List<Long> roleids) {
+		roleIds = roleids;
+	}
 	
 	//TODO Asset Object
 	public Optional<DTO_ImageAsset> getAvatar() throws SQLException {

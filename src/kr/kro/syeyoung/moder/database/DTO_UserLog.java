@@ -1,10 +1,11 @@
 package kr.kro.syeyoung.moder.database;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import net.dv8tion.jda.core.entities.User;
 import kr.kro.syeyoung.moder.Main;
-import kr.kro.syeyoung.moder.database.DTO_RoleLog.EventType;
+import net.dv8tion.jda.core.entities.User;
 
 public class DTO_UserLog {
 	public enum EventType {
@@ -61,6 +62,7 @@ public class DTO_UserLog {
 	private Long presence;
 	
 	
+	
 	public long getEventId() {
 		return eventId;
 	}
@@ -111,6 +113,5 @@ public class DTO_UserLog {
 	protected void setPresenceId(long long1) {
 		this.presence = long1;
 	}
-	
 	
 }

@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class DAO_UserLog {
@@ -50,6 +52,22 @@ public class DAO_UserLog {
 			dm.setDefaultAvatar(rs.getBoolean(6));
 			long l = rs.getLong(7);
 			dm.setAvatar(rs.wasNull() ? null : l);
+			
+			List<Long> roles = new ArrayList<Long>();
+			
+			Connection conn2 = DataSource.getConnection();
+			PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM MEMBER_OBJECT_has_GUILD_ROLES where MEMBER_OBJECT_MEMBER_ID=?");
+			ps2.setLong(1, dm.getMemberId());
+			ResultSet rs2 = ps2.executeQuery();
+			
+			while (rs2.next()) {
+				roles.add(rs2.getLong(2));
+			}
+
+			rs2.close();
+			ps2.close();
+			conn2.close();
+			dm.setRoles(roles);
 		}
 		
 		rs.close();
