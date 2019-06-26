@@ -24,8 +24,8 @@ public class Main {
 		configuration = new Properties();
 		FileInputStream fis = null;
 		try {
-			configuration.load(fis);
 			fis = new FileInputStream("config.properties");
+			configuration.load(fis);
 			fis.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -34,11 +34,16 @@ public class Main {
 	
 	private final static String token = configuration.getProperty("token");
 	
+	private static Main INSTANCE;
 	
+	public Properties getConfig() {
+		return configuration;
+	}
 	
 	public Main() throws LoginException, InterruptedException {
 		jda = new JDABuilder(AccountType.BOT).setToken(token).setStatus(OnlineStatus.ONLINE).setGame(Game.of(GameType.LISTENING, "+help")).build();
 		jda.awaitReady();
+		INSTANCE = this;
 	}
 	
 	public static void main(String args[]) {
@@ -47,5 +52,13 @@ public class Main {
 		} catch (LoginException | InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static Main getInstance() {
+		return INSTANCE;
+	}
+	
+	public JDA getJDA() {
+		return jda;
 	}
 }
