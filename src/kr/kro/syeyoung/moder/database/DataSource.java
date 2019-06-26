@@ -27,7 +27,7 @@ public class DataSource {
 	}
 	
 	private static HikariConfig config = new HikariConfig(proper);
-	private static HikariDataSource ds;
+	private static HikariDataSource ds = new HikariDataSource(config);
 	
 	private DataSource() {}
 	

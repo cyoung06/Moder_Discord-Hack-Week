@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Optional;
 
 public class DAO_ModerationLog {
@@ -33,7 +34,8 @@ public class DAO_ModerationLog {
 		ps.setLong(1, event_id);
 		ps.setByte(2, log.getType().getTypeId());
 		ps.setLong(3, log.getUserId());
-		ps.setString(4, log.getReason());
+		if (log.getReason() == null) ps.setNull(4, Types.VARCHAR);
+		else ps.setString(4, log.getReason());
 		
 		boolean successed= ps.executeUpdate() != 0;
 		ps.close();

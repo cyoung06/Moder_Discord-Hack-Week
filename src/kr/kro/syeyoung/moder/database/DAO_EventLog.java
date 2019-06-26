@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.LinkedList;
@@ -63,7 +64,7 @@ public class DAO_EventLog {
 	 */
 	public static long newEventLog(DTO_EventLog log) throws SQLException {
 		Connection conn = DataSource.getConnection();
-		PreparedStatement ps = conn.prepareStatement("INSERT INTO EVENT_LOG (EVENT_TYPE, USER_ID, GUILD_ID, TIME) values (?,?,?,?)");
+		PreparedStatement ps = conn.prepareStatement("INSERT INTO EVENT_LOG (EVENT_TYPE, USER_ID, GUILD_ID, TIME) values (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 		ps.setByte(1, log.getType().getTypeId());
 		ps.setLong(2, log.getUserId());
 		if (log.getGuildId() == null) ps.setNull(3, Types.BIGINT);
