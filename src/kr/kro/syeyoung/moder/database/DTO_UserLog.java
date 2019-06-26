@@ -56,17 +56,19 @@ public class DTO_UserLog {
 	private long eventId;
 	private EventType type;
 	private long userId;
-	private long memberId; // Internally managed one
+	private Long memberId; // Internally managed one
 	private OnlineStatus status;
-	private long presence;
+	private Long presence;
 	
 	
 	public long getEventId() {
 		return eventId;
 	}
+	
 	protected void setEventId(long id) {
 		this.eventId = id;
 	}
+	
 	public EventType getType() {
 		return type;
 	}
@@ -82,10 +84,10 @@ public class DTO_UserLog {
 	public void setUserId(long userId) {
 		this.userId = userId;
 	}
-	public long getMemberId() {
+	public Long getMemberId() {
 		return memberId;
 	}
-	public void setMemberId(long memberId) {
+	public void setMemberId(Long memberId) {
 		this.memberId = memberId;
 	}
 	public OnlineStatus getStatus() {
@@ -94,7 +96,7 @@ public class DTO_UserLog {
 	public void setStatus(OnlineStatus status) {
 		this.status = status;
 	}
-	public long getPresenceId() {
+	public Long getPresenceId() {
 		return presence;
 	}
 	
@@ -104,6 +106,10 @@ public class DTO_UserLog {
 	}
 	public void setPresence(DTO_Presence presence) {
 		this.presence = presence.getPresenceId();
+	}
+
+	protected void setPresenceId(long long1) {
+		this.presence = long1;
 	}
 	
 	

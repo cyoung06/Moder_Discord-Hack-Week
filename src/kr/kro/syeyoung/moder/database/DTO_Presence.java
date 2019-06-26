@@ -1,5 +1,6 @@
 package kr.kro.syeyoung.moder.database;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Optional;
 
@@ -101,8 +102,8 @@ public class DTO_Presence {
 	public Long getBigImageId() {
 		return BigImage;
 	}
-	public Optional<DTO_ImageAsset> getBigImage() {
-		return null;
+	public DTO_ImageAsset getBigImage() throws SQLException {
+		return DAO_Assets.getImageAssetByObjectId(BigImage).get();
 	}
 	public void setBigImage(Long bigImage) {
 		BigImage = bigImage;
@@ -110,8 +111,8 @@ public class DTO_Presence {
 	public Long getSmallImageId() {
 		return SmallImage;
 	}
-	public Optional<DTO_ImageAsset> getSmallImage() {
-		return null;
+	public DTO_ImageAsset getSmallImage() throws SQLException {
+		return DAO_Assets.getImageAssetByObjectId(SmallImage).get();
 	}
 	public void setSmallImage(Long smallImage) {
 		SmallImage = smallImage;

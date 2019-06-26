@@ -1,5 +1,6 @@
 package kr.kro.syeyoung.moder.database;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,7 +11,7 @@ public class DTO_Member {
 	private long memberId;
 	private long userId;
 	private String userName;
-	private int discriminator;
+	private short discriminator;
 	private String memberName;
 	private boolean defaultAvatar;
 	private Long Avatar;
@@ -37,10 +38,10 @@ public class DTO_Member {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public int getDiscriminator() {
+	public short getDiscriminator() {
 		return discriminator;
 	}
-	public void setDiscriminator(int discriminator) {
+	public void setDiscriminator(short discriminator) {
 		this.discriminator = discriminator;
 	}
 	public String getMemberName() {
@@ -73,8 +74,8 @@ public class DTO_Member {
 	
 	
 	//TODO Asset Object
-	public Optional<DTO_ImageAsset> getAvatar() {
-		return Optional.ofNullable(null);
+	public Optional<DTO_ImageAsset> getAvatar() throws SQLException {
+		return DAO_Assets.getImageAssetByObjectId(Avatar);
 	}
 	public Long getAvatarId() {
 		return Avatar;
