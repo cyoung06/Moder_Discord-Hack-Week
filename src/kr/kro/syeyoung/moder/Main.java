@@ -47,6 +47,7 @@ public class Main {
 		INSTANCE = this;
 		
 		jda.addEventListener(new ModerationEventHandler());
+		jda.addEventListener(new RoleEventHandler());
 	}
 	
 	public static void main(String args[]) {

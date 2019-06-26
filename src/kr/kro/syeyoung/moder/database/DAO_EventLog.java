@@ -78,7 +78,7 @@ public class DAO_EventLog {
 			eventId = rs.getLong(1);
 			rs.close();
 		}
-		
+		log.setEventId(eventId);
 		ps.close();
 		return eventId;
 	}

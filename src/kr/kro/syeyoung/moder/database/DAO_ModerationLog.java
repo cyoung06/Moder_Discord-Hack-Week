@@ -39,6 +39,8 @@ public class DAO_ModerationLog {
 		
 		boolean successed= ps.executeUpdate() != 0;
 		ps.close();
+		
+		log.setEventId(event_id);
 		return successed;
 	}
 }

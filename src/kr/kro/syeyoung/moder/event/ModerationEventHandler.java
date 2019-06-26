@@ -9,6 +9,7 @@ import kr.kro.syeyoung.moder.database.DAO_EventLog;
 import kr.kro.syeyoung.moder.database.DAO_ModerationLog;
 import kr.kro.syeyoung.moder.database.DTO_EventLog;
 import kr.kro.syeyoung.moder.database.DTO_ModerationLog;
+import kr.kro.syeyoung.moder.utils.AuditLogUtil;
 import net.dv8tion.jda.core.audit.ActionType;
 import net.dv8tion.jda.core.audit.AuditLogEntry;
 import net.dv8tion.jda.core.events.guild.GuildBanEvent;
@@ -25,7 +26,8 @@ public class ModerationEventHandler extends ListenerAdapter {
 		} catch (InterruptedException e2) {
 			e2.printStackTrace();
 		}
-		AuditLogEntry ale = e.getGuild().getAuditLogs().complete().stream().filter(en -> en.getType() == ActionType.BAN && en.getTargetIdLong() == e.getUser().getIdLong()).findFirst().orElse(null);
+		
+		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.BAN && en.getTargetIdLong() == e.getUser().getIdLong(), e.getGuild()).orElse(null);
 		
 		DTO_EventLog elog = new DTO_EventLog();
 		elog.setD(new Date());
@@ -63,7 +65,7 @@ public class ModerationEventHandler extends ListenerAdapter {
 		} catch (InterruptedException e2) {
 			e2.printStackTrace();
 		}
-		AuditLogEntry ale = e.getGuild().getAuditLogs().complete().stream().filter(en -> en.getType() == ActionType.UNBAN && en.getTargetIdLong() == e.getUser().getIdLong()).findFirst().orElse(null);
+		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.UNBAN && en.getTargetIdLong() == e.getUser().getIdLong(), e.getGuild()).orElse(null);
 		
 		DTO_EventLog elog = new DTO_EventLog();
 		elog.setD(new Date());
@@ -101,11 +103,7 @@ public class ModerationEventHandler extends ListenerAdapter {
 		} catch (InterruptedException e2) {
 			e2.printStackTrace();
 		}
-		AuditLogEntry ale = e.getGuild().getAuditLogs().complete().stream().filter(en -> en.getType() == ActionType.KICK && en.getTargetIdLong() == e.getUser().getIdLong()).findFirst().orElse(null);
-		
-		if (ale.getCreationTime().isBefore(Instant.now().minusSeconds(2).atOffset(ZoneOffset.UTC))) {
-			return;
-		}
+		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.KICK && en.getTargetIdLong() == e.getUser().getIdLong(), e.getGuild()).orElse(null);
 		
 		DTO_EventLog elog = new DTO_EventLog();
 		elog.setD(new Date());

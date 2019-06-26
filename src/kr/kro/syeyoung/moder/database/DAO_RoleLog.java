@@ -98,6 +98,7 @@ public class DAO_RoleLog {
 		if (genkey.first()) {
 			role_id = genkey.getLong(1);
 		}
+		dr.setRoleId(role_id);
 		genkey.close();
 		ps.close();
 		
@@ -115,6 +116,7 @@ public class DAO_RoleLog {
 		boolean success = ps.executeUpdate() != 0;
 		ps.close();
 		conn.close();
+		drl.setEventId(eventId);
 		
 		return success;
 	}
