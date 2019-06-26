@@ -8,6 +8,7 @@ import java.util.Properties;
 import javax.security.auth.login.LoginException;
 
 import kr.kro.syeyoung.moder.event.ModerationEventHandler;
+import kr.kro.syeyoung.moder.event.RoleEventHandler;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;

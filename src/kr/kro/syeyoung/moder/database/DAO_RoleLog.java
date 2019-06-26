@@ -108,7 +108,7 @@ public class DAO_RoleLog {
 	
 	public static boolean newDTO_Log(long eventId, DTO_RoleLog drl) throws SQLException {
 		Connection conn = DataSource.getConnection();
-		PreparedStatement ps = conn.prepareStatement("INSERT INTO GENERIC_GUILD_ROLE_LOG (EVENT_ID, EVENT_TYPE, ROLEO) values (?,?,?)");
+		PreparedStatement ps = conn.prepareStatement("INSERT INTO GENERIC_GUILD_ROLE_LOG (EVENT_ID, EVENT_TYPE, ROLE) values (?,?,?)");
 		ps.setLong(1, eventId);
 		ps.setByte(2, drl.getType().getTypeId());
 		ps.setLong(3, drl.getRoleId());

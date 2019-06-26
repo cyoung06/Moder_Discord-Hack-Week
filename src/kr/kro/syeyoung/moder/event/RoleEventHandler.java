@@ -39,7 +39,7 @@ public class RoleEventHandler extends ListenerAdapter {
 	
 	@Override
 	public void onRoleCreate(RoleCreateEvent e) {
-		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.ROLE_CREATE && en.getTargetIdLong() == e.getRole().getIdLong(), e.getGuild()).orElseGet(null);
+		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.ROLE_CREATE && en.getTargetIdLong() == e.getRole().getIdLong(), e.getGuild()).get();
 		User executor = ale.getUser();
 		
 		DTO_Role dr = discordRoleToDTO(e.getRole());
@@ -77,7 +77,7 @@ public class RoleEventHandler extends ListenerAdapter {
 
 	@Override
 	public void onRoleDelete(RoleDeleteEvent e) {
-		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.ROLE_DELETE && en.getTargetIdLong() == e.getRole().getIdLong(), e.getGuild()).orElseGet(null);
+		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.ROLE_DELETE && en.getTargetIdLong() == e.getRole().getIdLong(), e.getGuild()).get();
 		User executor = ale.getUser();
 		
 		DTO_Role dr = discordRoleToDTO(e.getRole());
@@ -114,8 +114,10 @@ public class RoleEventHandler extends ListenerAdapter {
 	}
 	
 	public void onRoleUpdate(GenericRoleUpdateEvent e, DTO_RoleLog.EventType type) {
-		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.ROLE_UPDATE && en.getTargetIdLong() == e.getRole().getIdLong(), e.getGuild()).orElseGet(null);
-		User executor = ale.getUser();
+		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.ROLE_UPDATE && en.getTargetIdLong() == e.getRole().getIdLong(), e.getGuild()).orElse(null);
+		Long executor = ale == null ? null : ale.getUser().getIdLong();
+		
+		
 		
 		DTO_Role dr = discordRoleToDTO(e.getRole());
 		try {
@@ -126,7 +128,7 @@ public class RoleEventHandler extends ListenerAdapter {
 		}
 		
 		DTO_EventLog elog = new DTO_EventLog();
-		elog.setUserId(executor.getIdLong());
+		elog.setUserId(executor);
 		elog.setType(DTO_EventLog.EventType.GuildRole);
 		elog.setGuildId(e.getGuild().getIdLong());
 		elog.setD(new Date());

@@ -11,6 +11,11 @@ import net.dv8tion.jda.core.entities.User;
 
 public class AuditLogUtil {
 	public static Optional<AuditLogEntry> getLastExecutor(Predicate<? super AuditLogEntry> p, Guild g) {
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		Optional<AuditLogEntry> ale = g.getAuditLogs().complete().stream().filter(p).findFirst();
 		if (!ale.isPresent()) return Optional.ofNullable(null);
 		

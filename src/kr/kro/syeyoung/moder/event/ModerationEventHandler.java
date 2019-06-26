@@ -27,7 +27,7 @@ public class ModerationEventHandler extends ListenerAdapter {
 			e2.printStackTrace();
 		}
 		
-		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.BAN && en.getTargetIdLong() == e.getUser().getIdLong(), e.getGuild()).orElse(null);
+		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.BAN && en.getTargetIdLong() == e.getUser().getIdLong(), e.getGuild()).get();
 		
 		DTO_EventLog elog = new DTO_EventLog();
 		elog.setD(new Date());
@@ -65,7 +65,7 @@ public class ModerationEventHandler extends ListenerAdapter {
 		} catch (InterruptedException e2) {
 			e2.printStackTrace();
 		}
-		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.UNBAN && en.getTargetIdLong() == e.getUser().getIdLong(), e.getGuild()).orElse(null);
+		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.UNBAN && en.getTargetIdLong() == e.getUser().getIdLong(), e.getGuild()).get();
 		
 		DTO_EventLog elog = new DTO_EventLog();
 		elog.setD(new Date());

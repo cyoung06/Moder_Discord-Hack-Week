@@ -66,7 +66,8 @@ public class DAO_EventLog {
 		Connection conn = DataSource.getConnection();
 		PreparedStatement ps = conn.prepareStatement("INSERT INTO EVENT_LOG (EVENT_TYPE, USER_ID, GUILD_ID, TIME) values (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 		ps.setByte(1, log.getType().getTypeId());
-		ps.setLong(2, log.getUserId());
+		if (log.getUserId() == null) ps.setNull(2, Types.BIGINT);
+		else ps.setLong(2, log.getUserId());
 		if (log.getGuildId() == null) ps.setNull(3, Types.BIGINT);
 		else ps.setLong(3, log.getGuildId());
 		ps.setTimestamp(4, new Timestamp(log.getD().getTime()));
