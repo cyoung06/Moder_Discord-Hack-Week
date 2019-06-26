@@ -55,7 +55,13 @@ public class DAO_EventLog {
 		return logs;
 	}
 	
-	public static void newEventLog(DTO_EventLog log) throws SQLException {
+	/**
+	 * 
+	 * @param log The DTO_EventLog
+	 * @return eventId
+	 * @throws SQLException
+	 */
+	public static long newEventLog(DTO_EventLog log) throws SQLException {
 		Connection conn = DataSource.getConnection();
 		PreparedStatement ps = conn.prepareStatement("INSERT INTO EVENT_LOG (EVENT_TYPE, USER_ID, GUILD_ID, TIME) values (?,?,?,?)");
 		ps.setByte(1, log.getType().getTypeId());
@@ -64,7 +70,15 @@ public class DAO_EventLog {
 		else ps.setLong(3, log.getGuildId());
 		ps.setTimestamp(4, new Timestamp(log.getD().getTime()));
 		
-		ps.executeUpdate();
+		long eventId = 0;
+		if (ps.executeUpdate() != 0) {
+			ResultSet rs = ps.getGeneratedKeys();
+			rs.first();
+			eventId = rs.getLong(1);
+			rs.close();
+		}
+		
 		ps.close();
+		return eventId;
 	}
 }

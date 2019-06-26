@@ -23,5 +23,20 @@ public class DAO_ModerationLog {
 			ml.setUserId(rs.getLong(3));
 			ml.setReason(rs.getString(4));
 		}
+		
+		return Optional.ofNullable(ml);
+	}
+	
+	public static boolean newModerationLog(long event_id, DTO_ModerationLog log) throws SQLException {
+		Connection conn = DataSource.getConnection();
+		PreparedStatement ps = conn.prepareStatement("INSERT INTO GENERIC_GUILD_MODERATION_LOG (EVENT_ID, EVENT_TYPE, USER_ID, REASON) values (?,?,?,?)");
+		ps.setLong(1, event_id);
+		ps.setByte(2, log.getType().getTypeId());
+		ps.setLong(3, log.getUserId());
+		ps.setString(4, log.getReason());
+		
+		boolean successed= ps.executeUpdate() != 0;
+		ps.close();
+		return successed;
 	}
 }
