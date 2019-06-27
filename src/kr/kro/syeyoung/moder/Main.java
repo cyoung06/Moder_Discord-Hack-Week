@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import javax.security.auth.login.LoginException;
 
+import kr.kro.syeyoung.moder.event.CommandHandler;
 import kr.kro.syeyoung.moder.event.ModerationEventHandler;
 import kr.kro.syeyoung.moder.event.RoleEventHandler;
 import net.dv8tion.jda.core.AccountType;
@@ -49,6 +50,7 @@ public class Main {
 		
 		jda.addEventListener(new ModerationEventHandler());
 		jda.addEventListener(new RoleEventHandler());
+		jda.addEventListener(new CommandHandler());
 	}
 	
 	public static void main(String args[]) {

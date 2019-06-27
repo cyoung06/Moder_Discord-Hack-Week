@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 public class DAO_ModerationLog {
@@ -27,6 +29,7 @@ public class DAO_ModerationLog {
 		
 		return Optional.ofNullable(ml);
 	}
+	
 	
 	public static boolean newModerationLog(long event_id, DTO_ModerationLog log) throws SQLException {
 		Connection conn = DataSource.getConnection();

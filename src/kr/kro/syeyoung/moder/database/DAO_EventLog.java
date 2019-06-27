@@ -56,6 +56,32 @@ public class DAO_EventLog {
 		return logs;
 	}
 	
+
+	public static List<DTO_EventLog> findEventLogsByGuildIdAndType(long gid, DTO_EventLog.EventType type) throws SQLException {
+		Connection conn = DataSource.getConnection();
+		PreparedStatement ps = conn.prepareStatement("SELECT * FROM EVENT_LOG where GUILD_ID = ? AND EVENT_TYPE = ?");
+		ps.setLong(1, gid);
+		ps.setByte(2, type.getTypeId());
+		
+		ResultSet rs = ps.getResultSet();
+		List<DTO_EventLog> logs = new LinkedList<DTO_EventLog>();
+		while (rs.next()) {
+
+			DTO_EventLog log = new DTO_EventLog();
+			log.setEventId(rs.getLong(1));
+			log.setType(DTO_EventLog.EventType.getEventTypeByTypeId(rs.getByte(2)));
+			log.setUserId(rs.getLong(3));
+			long val = rs.getLong(4);
+			log.setGuildId(rs.wasNull() ? null : val);
+			log.setD(rs.getDate(5));
+			
+			logs.add(log);
+		}
+		rs.close();
+		ps.close();
+		return logs;
+	}
+	
 	/**
 	 * 
 	 * @param log The DTO_EventLog

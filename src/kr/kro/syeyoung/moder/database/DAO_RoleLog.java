@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,25 @@ public class DAO_RoleLog {
 		if (rs.first()) {
 			drl = new DTO_RoleLog();
 			drl.setEventId(eventId);
+			drl.setType(DTO_RoleLog.EventType.getEventTypeByTypeId(rs.getByte(2)));
+			drl.setRoleId(rs.getLong(3));
+		}
+		rs.close();
+		ps.close();
+		
+		return Optional.ofNullable(drl);
+	}
+	
+	public static Optional<DTO_RoleLog> getRoleLogByRoleId(long roleId) throws SQLException {
+		Connection conn = DataSource.getConnection();
+		PreparedStatement ps = conn.prepareStatement("SELECT * FROM GENERIC_GUILD_ROLE_LOG where ROLE = ?");
+		ps.setLong(1, roleId);
+		
+		ResultSet rs = ps.executeQuery();
+		DTO_RoleLog drl = null;
+		if (rs.first()) {
+			drl = new DTO_RoleLog();
+			drl.setEventId(rs.getLong(1));
 			drl.setType(DTO_RoleLog.EventType.getEventTypeByTypeId(rs.getByte(2)));
 			drl.setRoleId(rs.getLong(3));
 		}
@@ -78,7 +98,52 @@ public class DAO_RoleLog {
 		return drs;
 	}
 	
+	//
+	public static List<DTO_RoleLog> findRoleLogsByRoleId(long roleid) throws SQLException {
+		Connection conn = DataSource.getConnection();
+		PreparedStatement ps = conn.prepareStatement("select generic_guild_role_log.*, guild_roles.DISCORD_ROLE_ID from generic_guild_role_log inner join guild_roles on generic_guild_role_log.ROLE = guild_roles.ROLE_ID where guild_roles.DISCORD_ROLE_ID = ?;");
+		ps.setLong(1, roleid);
+		
+		ResultSet rs = ps.executeQuery();
+		List<DTO_RoleLog> logs = new LinkedList<DTO_RoleLog>();
+		while (rs.next()) { 
+			DTO_RoleLog drl = new DTO_RoleLog();
+			drl.setEventId(rs.getLong(1));
+			drl.setType(DTO_RoleLog.EventType.getEventTypeByTypeId(rs.getByte(2)));
+			drl.setRoleId(rs.getLong(3));
+			logs.add(drl);
+		}
+		rs.close();
+		ps.close();
+		return logs;
+	}
 	
+	public static Optional<DTO_Role> findRoleByTimeBeforeAndDiscordRoleId(long discordid, Date time) throws SQLException {
+		Connection conn = DataSource.getConnection();
+		PreparedStatement ps= conn.prepareStatement("select * guild_roles where LAST_UPDATE <= ? AND DISCORD_ROLE_ID = ? limit 1");
+		
+		ps.setTimestamp(1, new Timestamp(time.getTime()));
+		ps.setLong(2, discordid);
+
+		ResultSet rs = ps.executeQuery();
+		DTO_Role dr = null;
+		if (rs.first()) {
+			dr = new DTO_Role();
+			dr.setRoleId(rs.getLong(1));
+			dr.setDiscordRoleId(discordid);
+			dr.setName(rs.getString(3));
+			dr.setColor(rs.getInt(4));
+			dr.setPermission(rs.getLong(5));
+			dr.setPosition(rs.getInt(6));
+			dr.setMentionable(rs.getBoolean(7));
+			dr.setLastUpdate(rs.getTimestamp(8));
+		}
+		
+		rs.close();
+		ps.close();
+		return Optional.ofNullable(dr);
+		
+	}
 	
 	public static long newDTO_Role(DTO_Role dr) throws SQLException {
 		Connection conn = DataSource.getConnection();
