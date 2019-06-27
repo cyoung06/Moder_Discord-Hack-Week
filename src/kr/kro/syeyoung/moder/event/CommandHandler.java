@@ -5,11 +5,13 @@ import java.util.List;
 
 import kr.kro.syeyoung.moder.Main;
 import kr.kro.syeyoung.moder.command.CMD_Help;
+import kr.kro.syeyoung.moder.command.CMD_Mod_History;
 import kr.kro.syeyoung.moder.command.CMD_Role_AllRollback;
 import kr.kro.syeyoung.moder.command.CMD_Role_Details;
 import kr.kro.syeyoung.moder.command.CMD_Role_History;
 import kr.kro.syeyoung.moder.command.CMD_Role_Rollback;
 import kr.kro.syeyoung.moder.command.CMD_Roles;
+import kr.kro.syeyoung.moder.command.CMD_User_Count;
 import kr.kro.syeyoung.moder.command.CommandBase;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.User;
@@ -31,6 +33,7 @@ public class CommandHandler extends ListenerAdapter {
 		commands.add(new CMD_Role_Rollback());
 		commands.add(new CMD_Role_AllRollback());
 		commands.add(new CMD_Mod_History());
+		commands.add(new CMD_User_Count());
 	}
 	
 	@Override
