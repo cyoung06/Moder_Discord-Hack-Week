@@ -30,6 +30,7 @@ public class CommandHandler extends ListenerAdapter {
 		commands.add(new CMD_Role_Details());
 		commands.add(new CMD_Role_Rollback());
 		commands.add(new CMD_Role_AllRollback());
+		commands.add(new CMD_Mod_History());
 	}
 	
 	@Override
