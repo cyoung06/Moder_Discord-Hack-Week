@@ -61,6 +61,7 @@ public class CMD_Role_History extends CommandBase {
 			}
 			try {
 				MAS.add(e.getChannel().sendMessage(new EmbedBuilder().addField("Action", logs.get(i).getType().name(), true)
+						.addField("Name", role.getName(), true)
 						.addField("Color", Integer.toHexString(role.getColor()), true)
 						.addField("MENTIONABLE", role.isMentionable() ? "YES" : "NO", true)
 						.addField("POSITION", role.getPosition() + "", true)

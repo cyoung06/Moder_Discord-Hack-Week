@@ -5,6 +5,7 @@ import java.util.List;
 
 import kr.kro.syeyoung.moder.Main;
 import kr.kro.syeyoung.moder.command.CMD_Help;
+import kr.kro.syeyoung.moder.command.CMD_Role_Details;
 import kr.kro.syeyoung.moder.command.CMD_Role_History;
 import kr.kro.syeyoung.moder.command.CMD_Roles;
 import kr.kro.syeyoung.moder.command.CommandBase;

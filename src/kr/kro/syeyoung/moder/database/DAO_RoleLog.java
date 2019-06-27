@@ -120,7 +120,7 @@ public class DAO_RoleLog {
 	
 	public static Optional<DTO_Role> findRoleByTimeBeforeAndDiscordRoleId(long discordid, Date time) throws SQLException {
 		Connection conn = DataSource.getConnection();
-		PreparedStatement ps= conn.prepareStatement("select * guild_roles where LAST_UPDATE <= ? AND DISCORD_ROLE_ID = ? limit 1");
+		PreparedStatement ps= conn.prepareStatement("select * from guild_roles where LASTUPDATE <= ? AND DISCORD_ROLE_ID = ? limit 1");
 		
 		ps.setTimestamp(1, new Timestamp(time.getTime()));
 		ps.setLong(2, discordid);
