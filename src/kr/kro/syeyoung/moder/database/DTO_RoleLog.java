@@ -6,7 +6,8 @@ import kr.kro.syeyoung.moder.database.DTO_ModerationLog.EventType;
 
 public class DTO_RoleLog {
 	public enum EventType {
-		Creation(0), Deletion(1), Color(2), Mentionable(3), Name(4), Permission(5), Position(6);
+		Creation(0), Deletion(1), Color(2), Mentionable(3), Name(4), Permission(5), Position(6)
+		,Rollback_Creation(7), Rollback_Deletion(8), Rollback_Edition(9);
 		
 		private int TypeId;
 		

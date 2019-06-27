@@ -25,7 +25,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 public class RoleEventHandler extends ListenerAdapter {
 	
-	public DTO_Role discordRoleToDTO(Role r) {
+	public static DTO_Role discordRoleToDTO(Role r) {
 		DTO_Role dr = new DTO_Role();
 		dr.setName(r.getName());
 		dr.setColor(r.getColorRaw());
@@ -41,6 +41,8 @@ public class RoleEventHandler extends ListenerAdapter {
 	public void onRoleCreate(RoleCreateEvent e) {
 		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.ROLE_CREATE && en.getTargetIdLong() == e.getRole().getIdLong(), e.getGuild()).get();
 		User executor = ale.getUser();
+		
+		if (executor.equals(e.getJDA().getSelfUser().getIdLong())) return;
 		
 		DTO_Role dr = discordRoleToDTO(e.getRole());
 		try {
@@ -79,7 +81,8 @@ public class RoleEventHandler extends ListenerAdapter {
 	public void onRoleDelete(RoleDeleteEvent e) {
 		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.ROLE_DELETE && en.getTargetIdLong() == e.getRole().getIdLong(), e.getGuild()).get();
 		User executor = ale.getUser();
-		
+
+		if (executor.equals(e.getJDA().getSelfUser().getIdLong())) return;
 		DTO_Role dr = discordRoleToDTO(e.getRole());
 		try {
 			DAO_RoleLog.newDTO_Role(dr);
@@ -117,8 +120,8 @@ public class RoleEventHandler extends ListenerAdapter {
 		AuditLogEntry ale = AuditLogUtil.getLastExecutor(en -> en.getType() == ActionType.ROLE_UPDATE && en.getTargetIdLong() == e.getRole().getIdLong(), e.getGuild()).orElse(null);
 		Long executor = ale == null ? null : ale.getUser().getIdLong();
 		
-		
-		
+
+		if (executor.equals(e.getJDA().getSelfUser().getIdLong())) return;
 		DTO_Role dr = discordRoleToDTO(e.getRole());
 		try {
 			DAO_RoleLog.newDTO_Role(dr);

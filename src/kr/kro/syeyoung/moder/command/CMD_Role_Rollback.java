@@ -10,8 +10,14 @@ import java.util.Optional;
 
 import kr.kro.syeyoung.moder.database.DAO_EventLog;
 import kr.kro.syeyoung.moder.database.DAO_RoleLog;
+import kr.kro.syeyoung.moder.database.DTO_EventLog;
 import kr.kro.syeyoung.moder.database.DTO_Role;
+import kr.kro.syeyoung.moder.database.DTO_RoleLog;
+import kr.kro.syeyoung.moder.event.RoleEventHandler;
+import kr.kro.syeyoung.moder.utils.AuditLogUtil;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.audit.ActionType;
+import net.dv8tion.jda.core.audit.AuditLogEntry;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -119,9 +125,42 @@ public class CMD_Role_Rollback extends CommandBase {
 		.setName(role.getName())
 		.setColor(role.getColor())
 		.setMentionable(role.isMentionable())
-		.setPermissions(role.getPermission()).reason("Role rollbacked by "+e.getAuthor().getAsTag()+" / by time of "+sdf.format(d)).queue();
+		.setPermissions(role.getPermission()).reason("Role rollbacked by "+e.getAuthor().getAsTag()+" / by time of "+sdf.format(d)).queue(a -> {
+					DTO_Role role2 = RoleEventHandler.discordRoleToDTO(e.getGuild().getRoleById(role.getDiscordRoleId()));
+					try {
+						DAO_RoleLog.newDTO_Role(role2);
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+					
+					DTO_EventLog elog = new DTO_EventLog();
+					elog.setUserId(e.getAuthor().getIdLong());
+					elog.setType(DTO_EventLog.EventType.GuildRole);
+					elog.setGuildId(e.getGuild().getIdLong());
+					elog.setD(new Date());
+					
+					long id = 0;
+					try {
+						id = DAO_EventLog.newEventLog(elog);
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+						return;
+					}
+					
+					DTO_RoleLog log = new DTO_RoleLog();
+					log.setRole(role2);
+					log.setType(DTO_RoleLog.EventType.Rollback_Edition);
+					
+					try {
+						DAO_RoleLog.newDTO_Log(id, log);
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+		});
 		
 
+		
+		
 		e.getChannel().sendMessage(new EmbedBuilder()
 				.setTitle("Success!")
 				.setDescription("Successfully rollbacked role "+role.getDiscordRoleId()+" to the time of "+sdf.format(d))
