@@ -1,7 +1,6 @@
 package kr.kro.syeyoung.moder;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -10,6 +9,8 @@ import javax.security.auth.login.LoginException;
 import kr.kro.syeyoung.moder.event.CommandHandler;
 import kr.kro.syeyoung.moder.event.ModerationEventHandler;
 import kr.kro.syeyoung.moder.event.RoleEventHandler;
+import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
+import net.dv8tion.jda.bot.sharding.ShardManager;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -19,7 +20,7 @@ import net.dv8tion.jda.core.entities.Game.GameType;
 
 public class Main {
 	
-	private JDA jda;
+	private ShardManager shards;
 
 	private static Properties configuration;
 
@@ -44,13 +45,20 @@ public class Main {
 	}
 	
 	public Main() throws LoginException, InterruptedException {
-		jda = new JDABuilder(AccountType.BOT).setToken(token).setStatus(OnlineStatus.ONLINE).setGame(Game.of(GameType.LISTENING, "+help")).build();
-		jda.awaitReady();
+//		jda = new JDABuilder(AccountType.BOT).setToken(token).setStatus(OnlineStatus.ONLINE).setGame(Game.of(GameType.LISTENING, "+help")).build();
+//		jda.awaitReady();
 		INSTANCE = this;
 		
-		jda.addEventListener(new ModerationEventHandler());
-		jda.addEventListener(new RoleEventHandler());
-		jda.addEventListener(new CommandHandler());
+		DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder();
+	    builder.setToken(token);
+	    builder.setGame(Game.of(GameType.LISTENING, "+help"));
+	    builder.setStatus(OnlineStatus.ONLINE);
+	    builder.setShardsTotal(2);
+	    shards = builder.build();
+		
+		shards.addEventListener(new ModerationEventHandler());
+		shards.addEventListener(new RoleEventHandler());
+		shards.addEventListener(new CommandHandler());
 	}
 	
 	public static void main(String args[]) {
@@ -65,7 +73,7 @@ public class Main {
 		return INSTANCE;
 	}
 	
-	public JDA getJDA() {
-		return jda;
+	public ShardManager getJDA() {
+		return shards;
 	}
 }

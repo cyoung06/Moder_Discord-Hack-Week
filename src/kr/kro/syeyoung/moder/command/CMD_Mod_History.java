@@ -40,7 +40,13 @@ public class CMD_Mod_History extends CommandBase {
 			return true;
 		}
 		
-		DTO_ModerationLog.EventType type = DTO_ModerationLog.EventType.valueOf(args[2]);
+		DTO_ModerationLog.EventType type;
+		
+		try {
+			type = DTO_ModerationLog.EventType.valueOf(args[2]);
+		} catch (Exception e2) {
+			type = null;
+		}
 		
 		Date start;
 		try {
@@ -128,11 +134,11 @@ public class CMD_Mod_History extends CommandBase {
 										null).build()).queue();
 				return true;
 			}
-			MAS.add(e.getChannel().sendMessage(new EmbedBuilder().addField("Action", elog.getType().name(), true)
+			MAS.add(e.getChannel().sendMessage(new EmbedBuilder().addField("Action", log.getType().name(), true)
 					.addField("User", log.getDiscordUser().map(u -> u.getAsTag()).orElse("Unknown User : "+log.getUserId()), true)
 					.addField("Moderator", elog.getDiscordUser().map(u -> u.getAsTag()).orElse("Unknown User"+elog.getUserId()), true)
-					.addField("Reason", log.getReason(), false)
-					.setTimestamp(elog.getD().toInstant()).setColor(new Color(54,57,63)).build()));
+					.addField("Reason", log.getReason() == null ? "EMPTY" : log.getReason(), false)
+					.setTimestamp(new Date(elog.getD().getTime()).toInstant()).setColor(new Color(54,57,63)).build()));
 		}
 		
 		

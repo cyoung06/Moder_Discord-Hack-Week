@@ -19,9 +19,9 @@ public class DAO_ModerationLog {
 		
 		DTO_ModerationLog ml = null;
 		
-		ResultSet rs = ps.getResultSet();
+		ResultSet rs = ps.executeQuery();
 		
-		if (rs.first()) {
+		if (rs.next()) {
 			ml = new DTO_ModerationLog();
 			ml.setEventId(l);
 			ml.setType(DTO_ModerationLog.EventType.getEventTypeByTypeId(rs.getByte(2)));
@@ -44,7 +44,7 @@ public class DAO_ModerationLog {
 		
 		DTO_ModerationLog ml = null;
 		
-		ResultSet rs = ps.getResultSet();
+		ResultSet rs = ps.executeQuery();
 		
 		List<DTO_ModerationLog> list = new ArrayList<>();
 		
@@ -70,7 +70,7 @@ public class DAO_ModerationLog {
 		
 		DTO_ModerationLog ml = null;
 		
-		ResultSet rs = ps.getResultSet();
+		ResultSet rs = ps.executeQuery();
 		
 		List<DTO_ModerationLog> list = new ArrayList<>();
 		

@@ -3,13 +3,9 @@ package kr.kro.syeyoung.moder.database;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-
-import kr.kro.syeyoung.moder.Main;
-
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 
 public class DataSource {
 	private static Properties proper=  new Properties();
@@ -26,12 +22,12 @@ public class DataSource {
 		}
 	}
 	
-	private static HikariConfig config = new HikariConfig(proper);
-	private static HikariDataSource ds = new HikariDataSource(config);
-	
+//	private static HikariConfig config = new HikariConfig(proper);
+//	private static HikariDataSource ds = new HikariDataSource(config);
+//	
 	private DataSource() {}
 	
 	public static Connection getConnection() throws SQLException {
-		return ds.getConnection();
+		return DriverManager.getConnection(proper.getProperty("jdbcUrl"));
 	}
 }

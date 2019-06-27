@@ -20,7 +20,7 @@ public class CMD_Role_Details extends CommandBase {
 		return "roles details";
 	}
 
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	@Override
 	public boolean execute(MessageReceivedEvent e) {

@@ -18,7 +18,7 @@ public class DAO_UserLog {
 		
 		ResultSet rs = ps.executeQuery();
 		DTO_UserLog dul = null;
-		if (rs.first()) {
+		if (rs.next()) {
 			dul = new DTO_UserLog();
 			dul.setEventId(eventId);
 			dul.setType(DTO_UserLog.EventType.getEventTypeByTypeId(rs.getByte(2)));
@@ -42,7 +42,7 @@ public class DAO_UserLog {
 		
 		ResultSet rs = ps.executeQuery();
 		DTO_Member dm = null;
-		if (rs.first()) {
+		if (rs.next()) {
 			dm = new DTO_Member();
 			dm.setMemberId(memberId);
 			dm.setUserId(rs.getLong(2));
@@ -112,7 +112,7 @@ public class DAO_UserLog {
 		
 		ResultSet rs = ps.getGeneratedKeys();
 		long mid = -1;
-		if (rs.first()) {
+		if (rs.next()) {
 			mid = rs.getLong(1);
 		}
 		rs.close();

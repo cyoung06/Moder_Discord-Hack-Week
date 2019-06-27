@@ -25,9 +25,9 @@
   		<version>3.8.3_462 </version>
   	</dependency>
   	<dependency>
-    	<groupId>mysql</groupId>
-    	<artifactId>mysql-connector-java</artifactId>
-    	<version>8.0.16</version>
+    	<groupId>org.xerial</groupId>
+    	<artifactId>sqlite-jdbc</artifactId>
+    	<version>3.28.0</version>
 	</dependency>
 	<dependency>
     	<groupId>com.zaxxer</groupId>

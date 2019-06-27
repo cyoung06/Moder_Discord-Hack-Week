@@ -26,7 +26,7 @@ public class CMD_Role_Rollback extends CommandBase {
 		return "roles rollback";
 	}
 
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	public boolean execute(MessageReceivedEvent e) {
 		Message m = e.getMessage();

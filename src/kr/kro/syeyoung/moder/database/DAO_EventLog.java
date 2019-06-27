@@ -18,7 +18,7 @@ public class DAO_EventLog {
 		ps.setLong(1, id);
 		ResultSet rs = ps.executeQuery();
 		DTO_EventLog log = null;
-		if (rs.first()) {
+		if (rs.next()) {
 			log = new DTO_EventLog();
 			log.setEventId(rs.getLong(1));
 			log.setType(DTO_EventLog.EventType.getEventTypeByTypeId(rs.getByte(2)));
@@ -101,7 +101,7 @@ public class DAO_EventLog {
 		long eventId = 0;
 		if (ps.executeUpdate() != 0) {
 			ResultSet rs = ps.getGeneratedKeys();
-			rs.first();
+			rs.next();
 			eventId = rs.getLong(1);
 			rs.close();
 		}

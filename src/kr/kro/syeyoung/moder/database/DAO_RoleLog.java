@@ -19,7 +19,7 @@ public class DAO_RoleLog {
 		
 		ResultSet rs = ps.executeQuery();
 		DTO_RoleLog drl = null;
-		if (rs.first()) {
+		if (rs.next()) {
 			drl = new DTO_RoleLog();
 			drl.setEventId(eventId);
 			drl.setType(DTO_RoleLog.EventType.getEventTypeByTypeId(rs.getByte(2)));
@@ -38,7 +38,7 @@ public class DAO_RoleLog {
 		
 		ResultSet rs = ps.executeQuery();
 		DTO_RoleLog drl = null;
-		if (rs.first()) {
+		if (rs.next()) {
 			drl = new DTO_RoleLog();
 			drl.setEventId(rs.getLong(1));
 			drl.setType(DTO_RoleLog.EventType.getEventTypeByTypeId(rs.getByte(2)));
@@ -57,7 +57,7 @@ public class DAO_RoleLog {
 		
 		ResultSet rs = ps.executeQuery();
 		DTO_Role dr = null;
-		if (rs.first()) {
+		if (rs.next()) {
 			dr = new DTO_Role();
 			dr.setRoleId(roleId);
 			dr.setDiscordRoleId(rs.getLong(2));
@@ -122,12 +122,12 @@ public class DAO_RoleLog {
 		Connection conn = DataSource.getConnection();
 		PreparedStatement ps= conn.prepareStatement("select * from guild_roles where LASTUPDATE <= ? AND DISCORD_ROLE_ID = ? limit 1");
 		
-		ps.setTimestamp(1, new Timestamp(time.getTime()));
+		ps.setLong(1, time.getTime());
 		ps.setLong(2, discordid);
 
 		ResultSet rs = ps.executeQuery();
 		DTO_Role dr = null;
-		if (rs.first()) {
+		if (rs.next()) {
 			dr = new DTO_Role();
 			dr.setRoleId(rs.getLong(1));
 			dr.setDiscordRoleId(discordid);
@@ -149,8 +149,11 @@ public class DAO_RoleLog {
 		Connection conn = DataSource.getConnection();
 		PreparedStatement ps= conn.prepareStatement("select generic_guild_role_log.*, event_log.GUILD_ID, MAX(guild_roles.LASTUPDATE) from generic_guild_role_log inner join event_log on event_log.EVENT_ID = generic_guild_role_log.EVENT_ID inner join guild_roles on guild_roles.ROLE_ID = generic_guild_role_log.ROLE where GUILD_ID = ? and event_log.EVENT_TYPE = 1 and guild_roles.LASTUPDATE <= ? group by DISCORD_ROLE_ID");
 		
+		System.out.println(guildid);
+		System.out.println(time.getTime());
+		
 		ps.setLong(1, guildid);
-		ps.setTimestamp(2, new Timestamp(time.getTime()));
+		ps.setLong(2, time.getTime());
 
 		ResultSet rs = ps.executeQuery();
 		List<DTO_RoleLog> logs = new LinkedList<DTO_RoleLog>();
@@ -175,13 +178,13 @@ public class DAO_RoleLog {
 		ps.setLong(4, dr.getPermission());
 		ps.setInt(5, dr.getPosition());
 		ps.setBoolean(6, dr.isMentionable());
-		ps.setTimestamp(7, new Timestamp(dr.getLastUpdate().getTime()));
+		ps.setLong(7, dr.getLastUpdate().getTime());
 		
 		int result = ps.executeUpdate();
 		
 		ResultSet genkey = ps.getGeneratedKeys();
 		long role_id = -1;
-		if (genkey.first()) {
+		if (genkey.next()) {
 			role_id = genkey.getLong(1);
 		}
 		dr.setRoleId(role_id);

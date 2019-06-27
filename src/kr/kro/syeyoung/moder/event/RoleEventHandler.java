@@ -121,7 +121,7 @@ public class RoleEventHandler extends ListenerAdapter {
 		Long executor = ale == null ? null : ale.getUser().getIdLong();
 		
 
-		if (executor.equals(e.getJDA().getSelfUser().getIdLong())) return;
+		if (e.getJDA().getSelfUser().getIdLong() == executor) return;
 		DTO_Role dr = discordRoleToDTO(e.getRole());
 		try {
 			DAO_RoleLog.newDTO_Role(dr);
@@ -173,10 +173,5 @@ public class RoleEventHandler extends ListenerAdapter {
 	@Override
 	public void onRoleUpdatePermissions(RoleUpdatePermissionsEvent e) {
 		onRoleUpdate(e, DTO_RoleLog.EventType.Permission);
-	}
-	
-	@Override
-	public void onRoleUpdatePosition(RoleUpdatePositionEvent e) {
-		onRoleUpdate(e, DTO_RoleLog.EventType.Position);
 	}
 }

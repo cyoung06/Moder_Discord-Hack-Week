@@ -25,10 +25,10 @@ public class CMD_Role_AllRollback extends CommandBase {
 
 	@Override
 	public String getPrefix() {
-		return "+roles allrollback";
+		return "roles allrollback";
 	}
 
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	@Override
 	public boolean execute(MessageReceivedEvent e) {
@@ -69,6 +69,7 @@ public class CMD_Role_AllRollback extends CommandBase {
 											null).build()).queue();
 			return true;
 		}
+		System.out.println("working on");
 		List<DTO_RoleLog> logs;
 		try {
 			logs = DAO_RoleLog.findRolesByTimeBeforeAndGuildId(e.getGuild()
@@ -88,11 +89,15 @@ public class CMD_Role_AllRollback extends CommandBase {
 			e1.printStackTrace();
 			return true;
 		}
-		
+
+		System.out.println("working on");
 		List<Runnable> tobe = new ArrayList<>();
 		List<Long> current_roles = e.getGuild().getRoles().stream().map(ra -> ra.getIdLong()).collect(Collectors.toCollection(() -> new ArrayList<>()));
-		
+
+		System.out.println("working on");
 		for (DTO_RoleLog log : logs) {
+			if (log.getType() == DTO_RoleLog.EventType.Deletion) continue;
+			System.out.println("working on"+log);
 			DTO_Role role;
 			try {
 				role = log.getDTORole();
@@ -112,7 +117,7 @@ public class CMD_Role_AllRollback extends CommandBase {
 				return true;
 			}
 			Role r = e.getGuild().getRoleById(role.getDiscordRoleId());
-
+			
 			current_roles.remove(role.getDiscordRoleId());
 			if (r != null) {
 				tobe.add(() -> r.getManager()
@@ -120,23 +125,34 @@ public class CMD_Role_AllRollback extends CommandBase {
 				.setColor(role.getColor())
 				.setMentionable(role.isMentionable())
 				.setPermissions(role.getPermission()).reason("Role rollbacked by "+e.getAuthor().getAsTag()+" / by time of "+sdf.format(d)).queue(a -> logAction(r, DTO_RoleLog.EventType.Rollback_Edition, e.getAuthor().getIdLong(), e.getGuild().getIdLong())));
+				tobe.add(() -> e.getChannel().sendMessage(new EmbedBuilder()
+				.setTitle("Success!")
+				.setDescription("Successfully rollbacked role "+role.getDiscordRoleId()+" to the time of "+sdf.format(d))
+				.addField("Name", role.getName(), true)
+				.addField("Color", Integer.toHexString(role.getColor()), true)
+				.addField("MENTIONABLE", role.isMentionable() ? "YES" : "NO", true)
+				.addField("POSITION", role.getPosition() + "", true)
+				.addField("PERMISSION", role.getPermission() + "", true)
+				.setTimestamp(Instant.now()).setColor(Color.green).build()).queue());
 			} else {
-				tobe.add(() -> e.getGuild().getController().createRole()
-				.setName(role.getName())
-				.setColor(role.getColor())
-				.setMentionable(role.isMentionable())
-				.setPermissions(role.getPermission())
-				.reason("Role rollbacked by "+e.getAuthor().getAsTag()+" / by time of "+sdf.format(d)).queue(a -> logAction(r, DTO_RoleLog.EventType.Rollback_Creation, e.getAuthor().getIdLong(), e.getGuild().getIdLong())));
+				tobe.add(() -> {
+					Role r2 = e.getGuild().getController().createRole().complete();
+					r2.getManager().setName(role.getName())
+					.setColor(role.getColor())
+					.setMentionable(role.isMentionable())
+					.setPermissions(role.getPermission())
+					.reason("Role rollbacked by "+e.getAuthor().getAsTag()+" / by time of "+sdf.format(d)).queue(a -> logAction(r2, DTO_RoleLog.EventType.Rollback_Creation, e.getAuthor().getIdLong(), e.getGuild().getIdLong()));
+					e.getChannel().sendMessage(new EmbedBuilder()
+					.setTitle("Success!")
+					.setDescription("Successfully rollbacked role "+r2.getIdLong()+" to the time of "+sdf.format(d))
+					.addField("Name", role.getName(), true)
+					.addField("Color", Integer.toHexString(role.getColor()), true)
+					.addField("MENTIONABLE", role.isMentionable() ? "YES" : "NO", true)
+					.addField("POSITION", role.getPosition() + "", true)
+					.addField("PERMISSION", role.getPermission() + "", true)
+					.setTimestamp(Instant.now()).setColor(Color.green).build()).queue();
+				});
 			}
-			tobe.add(() -> e.getChannel().sendMessage(new EmbedBuilder()
-			.setTitle("Success!")
-			.setDescription("Successfully rollbacked role "+role.getDiscordRoleId()+" to the time of "+sdf.format(d))
-			.addField("Name", role.getName(), true)
-			.addField("Color", Integer.toHexString(role.getColor()), true)
-			.addField("MENTIONABLE", role.isMentionable() ? "YES" : "NO", true)
-			.addField("POSITION", role.getPosition() + "", true)
-			.addField("PERMISSION", role.getPermission() + "", true)
-			.setTimestamp(Instant.now()).setColor(Color.green).build()).queue());
 		}
 		for (Long l: current_roles) {
 			Role r = e.getGuild().getRoleById(l);
@@ -147,6 +163,10 @@ public class CMD_Role_AllRollback extends CommandBase {
 			.addField("Details", "DELETED", true)
 			.setTimestamp(Instant.now()).setColor(Color.green).build()).queue());
 		}
+		
+		tobe.forEach(r -> {
+			try {r.run();} catch (Exception e1) {}
+		});
 		return true;
 	}
 	

@@ -15,7 +15,7 @@ public class DAO_Assets {
 		
 		DTO_ImageAsset dia = null;
 		ResultSet rs = ps.getResultSet();
-		if (rs.first()) {
+		if (rs.next()) {
 			dia = new DTO_ImageAsset();
 			dia.setObjectId(oid);
 			dia.setOrigin(rs.getString(2));
@@ -35,7 +35,7 @@ public class DAO_Assets {
 		
 		DTO_VideoAsset dia = null;
 		ResultSet rs = ps.getResultSet();
-		if (rs.first()) {
+		if (rs.next()) {
 			dia = new DTO_VideoAsset();
 			dia.setObjectId(oid);
 			dia.setOrigin(rs.getString(2));
@@ -59,7 +59,7 @@ public class DAO_Assets {
 		
 		ResultSet rs = ps.getGeneratedKeys();
 		long key = -1;
-		if (rs.first()) {
+		if (rs.next()) {
 			key = rs.getLong(1);
 			ia.setObjectId(key);
 		}
@@ -79,7 +79,7 @@ public class DAO_Assets {
 		
 		ResultSet rs = ps.getGeneratedKeys();
 		long key = -1;
-		if (rs.first()) {
+		if (rs.next()) {
 			key = rs.getLong(1);
 			ia.setObjectId(key);
 		}

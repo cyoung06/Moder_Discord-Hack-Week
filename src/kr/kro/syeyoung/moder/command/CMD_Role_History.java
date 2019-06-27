@@ -23,7 +23,7 @@ public class CMD_Role_History extends CommandBase {
 		return "roles history";
 	}
 
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	@Override
 	public boolean execute(MessageReceivedEvent e) {
 		Message msg = e.getMessage();
@@ -49,7 +49,7 @@ public class CMD_Role_History extends CommandBase {
 			e1.printStackTrace();
 			return true;
 		}
-		MessageAction MA = e.getChannel().sendMessage(new EmbedBuilder().setTitle("Role Edit History for "+r.getName()+" ("+r.getPosition()+")").setDescription("There were total of "+logs.size()+" edit history for the role").build());
+		MessageAction MA = e.getChannel().sendMessage(new EmbedBuilder().setTitle("Role Edit History for "+r.getName()+" ("+r.getIdLong()+")").setDescription("There were total of "+logs.size()+" edit history for the role").build());
 		List<MessageAction> MAS = new LinkedList<>();
 		for (int i = 0;i < logs.size(); i ++) {
 			DTO_RoleLog elog = logs.get(i);
@@ -66,6 +66,7 @@ public class CMD_Role_History extends CommandBase {
 						.addField("MENTIONABLE", role.isMentionable() ? "YES" : "NO", true)
 						.addField("POSITION", role.getPosition() + "", true)
 						.addField("PERMISSION", role.getPermission() + "", true)
+						.addField("DETAILED_DATE", sdf.format(role.getLastUpdate()), true)
 						.addField("Changes Made by", DAO_EventLog.getEventLogById(elog.getEventId()).get().getDiscordUser().map(a -> a.getAsTag()).orElse("Unknown") + "", true)
 						.setTimestamp(role.getLastUpdate().toInstant()).setColor(new Color(54,57,63)).build()));
 			} catch (SQLException e1) {
