@@ -58,7 +58,7 @@ public class DAO_ModerationLog {
 		}
 		
 		return list;
-	}
+	}//
 	
 	public static List<DTO_ModerationLog> getModerationLogsByGuildIdandBetweenTimeOnType(long guild_id, byte type, Date start, Date end) throws SQLException {
 		Connection conn = DataSource.getConnection();

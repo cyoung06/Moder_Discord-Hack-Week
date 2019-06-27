@@ -117,8 +117,6 @@ public class DTO_Presence {
 	public void setSmallImage(Long smallImage) {
 		SmallImage = smallImage;
 	}
-	
-	
 	public String getBigTooltip() {
 		return BigTooltip;
 	}
@@ -131,6 +129,4 @@ public class DTO_Presence {
 	public void setSmallTooltip(String smallTooltip) {
 		SmallTooltip = smallTooltip;
 	}
-	
-	
 }
