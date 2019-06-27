@@ -145,6 +145,27 @@ public class DAO_RoleLog {
 		
 	}
 	
+	public static List<DTO_RoleLog> findRolesByTimeBeforeAndGuildId(long guildid, Date time) throws SQLException {
+		Connection conn = DataSource.getConnection();
+		PreparedStatement ps= conn.prepareStatement("select generic_guild_role_log.*, event_log.GUILD_ID, MAX(guild_roles.LASTUPDATE) from generic_guild_role_log inner join event_log on event_log.EVENT_ID = generic_guild_role_log.EVENT_ID inner join guild_roles on guild_roles.ROLE_ID = generic_guild_role_log.ROLE where GUILD_ID = ? and event_log.EVENT_TYPE = 1 and guild_roles.LASTUPDATE <= ? group by DISCORD_ROLE_ID");
+		
+		ps.setLong(1, guildid);
+		ps.setTimestamp(2, new Timestamp(time.getTime()));
+
+		ResultSet rs = ps.executeQuery();
+		List<DTO_RoleLog> logs = new LinkedList<DTO_RoleLog>();
+		while (rs.next()) { 
+			DTO_RoleLog drl = new DTO_RoleLog();
+			drl.setEventId(rs.getLong(1));
+			drl.setType(DTO_RoleLog.EventType.getEventTypeByTypeId(rs.getByte(2)));
+			drl.setRoleId(rs.getLong(3));
+			logs.add(drl);
+		}
+		rs.close();
+		ps.close();
+		return logs;
+	}
+	
 	public static long newDTO_Role(DTO_Role dr) throws SQLException {
 		Connection conn = DataSource.getConnection();
 		PreparedStatement ps = conn.prepareStatement("INSERT INTO GUILD_ROLES (DISCORD_ROLE_ID, NAME, COLOR, PERMISSIONS, POSITION, MENTIONABLE, LASTUPDATE) values (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
