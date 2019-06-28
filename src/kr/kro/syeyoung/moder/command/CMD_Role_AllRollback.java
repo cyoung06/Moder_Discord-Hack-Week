@@ -124,6 +124,7 @@ public class CMD_Role_AllRollback extends CommandBase {
 				.setName(role.getName())
 				.setColor(role.getColor())
 				.setMentionable(role.isMentionable())
+				.setHoisted(role.isHoisted())
 				.setPermissions(role.getPermission()).reason("Role rollbacked by "+e.getAuthor().getAsTag()+" / by time of "+sdf.format(d)).queue(a -> logAction(r, DTO_RoleLog.EventType.Rollback_Edition, e.getAuthor().getIdLong(), e.getGuild().getIdLong())));
 				tobe.add(() -> e.getChannel().sendMessage(new EmbedBuilder()
 				.setTitle("Success!")
@@ -133,12 +134,14 @@ public class CMD_Role_AllRollback extends CommandBase {
 				.addField("MENTIONABLE", role.isMentionable() ? "YES" : "NO", true)
 				.addField("POSITION", role.getPosition() + "", true)
 				.addField("PERMISSION", role.getPermission() + "", true)
+				.addField("HOISTED", role.isHoisted() ? "YES" : "NO", true)
 				.setTimestamp(Instant.now()).setColor(Color.green).build()).queue());
 			} else {
 				tobe.add(() -> {
 					Role r2 = e.getGuild().getController().createRole().complete();
 					r2.getManager().setName(role.getName())
 					.setColor(role.getColor())
+					.setHoisted(role.isHoisted())
 					.setMentionable(role.isMentionable())
 					.setPermissions(role.getPermission())
 					.reason("Role rollbacked by "+e.getAuthor().getAsTag()+" / by time of "+sdf.format(d)).queue(a -> logAction(r2, DTO_RoleLog.EventType.Rollback_Creation, e.getAuthor().getIdLong(), e.getGuild().getIdLong()));
@@ -150,6 +153,7 @@ public class CMD_Role_AllRollback extends CommandBase {
 					.addField("MENTIONABLE", role.isMentionable() ? "YES" : "NO", true)
 					.addField("POSITION", role.getPosition() + "", true)
 					.addField("PERMISSION", role.getPermission() + "", true)
+					.addField("HOISTED", role.isHoisted() ? "YES" : "NO", true)
 					.setTimestamp(Instant.now()).setColor(Color.green).build()).queue();
 				});
 			}

@@ -15,6 +15,7 @@ public class DTO_Role {
 	private long permission;
 	private int position;
 	private boolean mentionable;
+	private boolean hoisted;
 	private Date lastUpdate;
 	
 	public long getRoleId() {
@@ -67,5 +68,11 @@ public class DTO_Role {
 	}
 	public void setLastUpdate(Date lastUpdate) {
 		this.lastUpdate = lastUpdate;
+	}
+	public boolean isHoisted() {
+		return hoisted;
+	}
+	public void setHoisted(boolean hoisted) {
+		this.hoisted = hoisted;
 	}
 }

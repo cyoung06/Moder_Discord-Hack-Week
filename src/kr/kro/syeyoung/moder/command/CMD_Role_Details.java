@@ -83,6 +83,7 @@ public class CMD_Role_Details extends CommandBase {
 					.addField("MENTIONABLE", role.isMentionable() ? "YES" : "NO", true)
 					.addField("POSITION", role.getPosition() + "", true)
 					.addField("PERMISSION", role.getPermission() + "", true)
+					.addField("HOISTED", role.isHoisted() ? "YES" : "NO", true)
 					.addField("Changes Made by", DAO_EventLog.getEventLogById(DAO_RoleLog.getRoleLogByRoleId(role.getRoleId()).get().getEventId()).get().getDiscordUser().map(a -> a.getAsTag()).orElse("Unknown") + "", true)
 					.setTimestamp(role.getLastUpdate().toInstant()).setColor(new Color(54,57,63)).build()).queue();
 		} catch (SQLException e1) {

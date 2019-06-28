@@ -120,7 +120,7 @@ public class CMD_Role_Rollback extends CommandBase {
 			e1.printStackTrace();
 			return true;
 		}
-		
+
 		e.getGuild().getRoleById(role.getDiscordRoleId()).getManager()
 		.setName(role.getName())
 		.setColor(role.getColor())
@@ -169,6 +169,7 @@ public class CMD_Role_Rollback extends CommandBase {
 				.addField("MENTIONABLE", role.isMentionable() ? "YES" : "NO", true)
 				.addField("POSITION", role.getPosition() + "", true)
 				.addField("PERMISSION", role.getPermission() + "", true)
+				.addField("HOISTED", role.isHoisted() ? "YES" : "NO", true)
 				.setTimestamp(Instant.now()).setColor(Color.green).build()).queue();
 		
 		

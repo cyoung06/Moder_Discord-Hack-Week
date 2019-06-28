@@ -65,6 +65,7 @@ public class CMD_Role_History extends CommandBase {
 						.addField("Color", Integer.toHexString(role.getColor()), true)
 						.addField("MENTIONABLE", role.isMentionable() ? "YES" : "NO", true)
 						.addField("POSITION", role.getPosition() + "", true)
+						.addField("HOISTED", role.isHoisted() ? "YES" : "NO", true)
 						.addField("PERMISSION", role.getPermission() + "", true)
 						.addField("DETAILED_DATE", sdf.format(role.getLastUpdate()), true)
 						.addField("Changes Made by", DAO_EventLog.getEventLogById(elog.getEventId()).get().getDiscordUser().map(a -> a.getAsTag()).orElse("Unknown") + "", true)

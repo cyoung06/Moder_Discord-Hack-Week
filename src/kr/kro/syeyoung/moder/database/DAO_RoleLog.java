@@ -66,7 +66,8 @@ public class DAO_RoleLog {
 			dr.setPermission(rs.getLong(5));
 			dr.setPosition(rs.getInt(6));
 			dr.setMentionable(rs.getBoolean(7));
-			dr.setLastUpdate(rs.getTimestamp(8));
+			dr.setHoisted(rs.getBoolean(8));
+			dr.setLastUpdate(rs.getTimestamp(9));
 		}
 		
 		rs.close();
@@ -83,14 +84,15 @@ public class DAO_RoleLog {
 		List<DTO_Role> drs = new LinkedList<>();
 		while (rs.next()) {
 			DTO_Role dr = new DTO_Role();
-			dr.setRoleId(rs.getLong(1));
+			dr.setRoleId(roleId);
 			dr.setDiscordRoleId(rs.getLong(2));
 			dr.setName(rs.getString(3));
 			dr.setColor(rs.getInt(4));
 			dr.setPermission(rs.getLong(5));
 			dr.setPosition(rs.getInt(6));
 			dr.setMentionable(rs.getBoolean(7));
-			dr.setLastUpdate(rs.getTimestamp(8));
+			dr.setHoisted(rs.getBoolean(8));
+			dr.setLastUpdate(rs.getTimestamp(9));
 			drs.add(dr);
 		}
 		rs.close();
@@ -130,13 +132,14 @@ public class DAO_RoleLog {
 		if (rs.next()) {
 			dr = new DTO_Role();
 			dr.setRoleId(rs.getLong(1));
-			dr.setDiscordRoleId(discordid);
+			dr.setDiscordRoleId(rs.getLong(2));
 			dr.setName(rs.getString(3));
 			dr.setColor(rs.getInt(4));
 			dr.setPermission(rs.getLong(5));
 			dr.setPosition(rs.getInt(6));
 			dr.setMentionable(rs.getBoolean(7));
-			dr.setLastUpdate(rs.getTimestamp(8));
+			dr.setHoisted(rs.getBoolean(8));
+			dr.setLastUpdate(rs.getTimestamp(9));
 		}
 		
 		rs.close();
@@ -171,14 +174,15 @@ public class DAO_RoleLog {
 	
 	public static long newDTO_Role(DTO_Role dr) throws SQLException {
 		Connection conn = DataSource.getConnection();
-		PreparedStatement ps = conn.prepareStatement("INSERT INTO GUILD_ROLES (DISCORD_ROLE_ID, NAME, COLOR, PERMISSIONS, POSITION, MENTIONABLE, LASTUPDATE) values (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement ps = conn.prepareStatement("INSERT INTO GUILD_ROLES (DISCORD_ROLE_ID, NAME, COLOR, PERMISSIONS, POSITION, MENTIONABLE, HOISTED, LASTUPDATE) values (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 		ps.setLong(1, dr.getDiscordRoleId());
 		ps.setString(2, dr.getName());
 		ps.setInt(3, dr.getColor());
 		ps.setLong(4, dr.getPermission());
 		ps.setInt(5, dr.getPosition());
 		ps.setBoolean(6, dr.isMentionable());
-		ps.setLong(7, dr.getLastUpdate().getTime());
+		ps.setBoolean(7, dr.isHoisted());
+		ps.setLong(8, dr.getLastUpdate().getTime());
 		
 		int result = ps.executeUpdate();
 		
